@@ -1,5 +1,13 @@
 # source: http://localhost:4466
-# timestamp: Thu Nov 08 2018 16:35:46 GMT+0300 (GMT+03:00)
+# timestamp: Fri Nov 09 2018 15:41:30 GMT+0300 (GMT+03:00)
+
+type AggregateEntry {
+  count: Int!
+}
+
+type AggregateTag {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -10,6 +18,239 @@ type BatchPayload {
   count: Long!
 }
 
+type Entry implements Node {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+"""A connection to a list of items."""
+type EntryConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [EntryEdge]!
+  aggregate: AggregateEntry!
+}
+
+input EntryCreateInput {
+  title: String!
+  description: String!
+}
+
+"""An edge in a connection."""
+type EntryEdge {
+  """The item at the end of the edge."""
+  node: Entry!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum EntryOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type EntryPreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+type EntrySubscriptionPayload {
+  mutation: MutationType!
+  node: Entry
+  updatedFields: [String!]
+  previousValues: EntryPreviousValues
+}
+
+input EntrySubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [EntrySubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [EntrySubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [EntrySubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: EntryWhereInput
+}
+
+input EntryUpdateInput {
+  title: String
+  description: String
+}
+
+input EntryUpdateManyMutationInput {
+  title: String
+  description: String
+}
+
+input EntryWhereInput {
+  """Logical AND on all given filters."""
+  AND: [EntryWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [EntryWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [EntryWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+}
+
+input EntryWhereUniqueInput {
+  id: ID
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -18,11 +259,20 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createTag(data: TagCreateInput!): Tag!
+  createEntry(data: EntryCreateInput!): Entry!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateEntry(data: EntryUpdateInput!, where: EntryWhereUniqueInput!): Entry
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteEntry(where: EntryWhereUniqueInput!): Entry
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertEntry(where: EntryWhereUniqueInput!, create: EntryCreateInput!, update: EntryUpdateInput!): Entry!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
+  updateManyEntries(data: EntryUpdateManyMutationInput!, where: EntryWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyTags(where: TagWhereInput): BatchPayload!
+  deleteManyEntries(where: EntryWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -54,8 +304,13 @@ type PageInfo {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  entries(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entry]!
   user(where: UserWhereUniqueInput!): User
+  entry(where: EntryWhereUniqueInput!): Entry
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  entriesConnection(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntryConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -66,6 +321,144 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
+  entry(where: EntrySubscriptionWhereInput): EntrySubscriptionPayload
+}
+
+type Tag {
+  name: String!
+}
+
+"""A connection to a list of items."""
+type TagConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TagEdge]!
+  aggregate: AggregateTag!
+}
+
+input TagCreateInput {
+  name: String!
+}
+
+"""An edge in a connection."""
+type TagEdge {
+  """The item at the end of the edge."""
+  node: Tag!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TagOrderByInput {
+  name_ASC
+  name_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TagPreviousValues {
+  name: String!
+}
+
+type TagSubscriptionPayload {
+  mutation: MutationType!
+  node: Tag
+  updatedFields: [String!]
+  previousValues: TagPreviousValues
+}
+
+input TagSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TagSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TagSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TagSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TagWhereInput
+}
+
+input TagUpdateManyMutationInput {
+  name: String
+}
+
+input TagWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TagWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TagWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TagWhereInput!]
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
 }
 
 type User implements Node {

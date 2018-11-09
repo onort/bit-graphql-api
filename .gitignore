@@ -1,5 +1,6 @@
-.env
+*.env
 docker-compose.yml
-prisma.yml
 
 node_modules
+
+notes.md

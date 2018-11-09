@@ -1,9 +1,13 @@
 const Mutations = {
-  createDog(parent, args, ctx, info) {
-    global.dogs = global.dogs || []
-    const newDog = { name: args.name }
-    global.dogs.push(newDog)
-    return newDog
+  async createEntry(parent, args, ctx, info) {
+    // entry returns a promise
+    const entry = await ctx.db.mutation.createEntry(
+      {
+        data: { ...args }
+      },
+      info
+    )
+    return entry
   }
 }
 

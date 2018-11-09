@@ -1,0 +1,14 @@
+type User {
+  id: ID! @unique
+  name: String!
+}
+
+type Tag {
+  name: String!
+}
+
+type Entry {
+  id: ID! @unique
+  title: String!
+  description: String!
+}
