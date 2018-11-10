@@ -1,6 +1,11 @@
 type User {
   id: ID! @unique
+  email: String! @unique
   name: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission]
 }
 
 type Tag {
@@ -11,4 +16,12 @@ type Entry {
   id: ID! @unique
   title: String!
   description: String!
+}
+
+enum Permission {
+  DEVELOPER
+  ADMIN
+  CREATOR
+  USER
+  PERMISSIONUPDATE
 }
