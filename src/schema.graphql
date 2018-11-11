@@ -7,4 +7,5 @@ type Mutation {
 
 type Query {
   entries: [Entry]!
+  me: User
 }
