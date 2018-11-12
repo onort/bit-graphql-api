@@ -32,10 +32,32 @@ const Mutations = {
     const token = jwt.sign({ userId: user.id }, process.env.PRISMA_SECRET)
     ctx.response.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 365
     })
     return user
+  },
+
+  async signIn(parent, args, ctx, info) {
+    let { email, password } = args
+    const user = await ctx.db.query.user({
+      where: { email: email.toLowerCase() }
+    })
+    if (!user) throw new Error(`No user found for email: ${email}`)
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) throw new Error(`Invalid password.`)
+    const token = jwt.sign({ userId: user.id }, process.env.PRISMA_SECRET)
+    ctx.response.cookie("token", token, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 * 365
+    })
+    return user
+  },
+
+  signOut(parent, args, ctx, info) {
+    ctx.response.clearCookie("token")
+    return { message: "Signout successful." }
   }
 }
 
