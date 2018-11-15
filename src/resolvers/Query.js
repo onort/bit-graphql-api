@@ -12,6 +12,10 @@ const Query = {
       },
       info
     )
+  },
+
+  async tags(parent, args, ctx, info) {
+    return await ctx.db.query.tags({}, info)
   }
   // async entries(parent, args, ctx, info) {
   //   const entries = await ctx.db.query.entries()

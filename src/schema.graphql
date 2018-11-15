@@ -6,12 +6,14 @@ type SuccessMessage {
 
 type Mutation {
   createEntry(title: String, description: String): Entry!
+  createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
   registerUser(email: String!, password: String!, name: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
 }
 
 type Query {
-  entries: [Entry]!
   currentUser: User
+  entries: [Entry]!
+  tags: [Tag!]
 }

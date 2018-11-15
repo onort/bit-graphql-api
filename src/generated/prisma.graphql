@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Nov 10 2018 19:05:08 GMT+0300 (GMT+03:00)
+# timestamp: Thu Nov 15 2018 20:10:23 GMT+0300 (GMT+03:00)
 
 type AggregateEntry {
   count: Int!
@@ -18,10 +18,12 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type Entry implements Node {
   id: ID!
-  title: String!
   description: String!
+  title: String!
 }
 
 """A connection to a list of items."""
@@ -35,8 +37,8 @@ type EntryConnection {
 }
 
 input EntryCreateInput {
-  title: String!
   description: String!
+  title: String!
 }
 
 """An edge in a connection."""
@@ -51,10 +53,10 @@ type EntryEdge {
 enum EntryOrderByInput {
   id_ASC
   id_DESC
-  title_ASC
-  title_DESC
   description_ASC
   description_DESC
+  title_ASC
+  title_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -63,8 +65,8 @@ enum EntryOrderByInput {
 
 type EntryPreviousValues {
   id: ID!
-  title: String!
   description: String!
+  title: String!
 }
 
 type EntrySubscriptionPayload {
@@ -107,13 +109,13 @@ input EntrySubscriptionWhereInput {
 }
 
 input EntryUpdateInput {
-  title: String
   description: String
+  title: String
 }
 
 input EntryUpdateManyMutationInput {
-  title: String
   description: String
+  title: String
 }
 
 input EntryWhereInput {
@@ -165,46 +167,6 @@ input EntryWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  title: String
-
-  """All values that are not equal to given value."""
-  title_not: String
-
-  """All values that are contained in given list."""
-  title_in: [String!]
-
-  """All values that are not contained in given list."""
-  title_not_in: [String!]
-
-  """All values less than the given value."""
-  title_lt: String
-
-  """All values less than or equal the given value."""
-  title_lte: String
-
-  """All values greater than the given value."""
-  title_gt: String
-
-  """All values greater than or equal the given value."""
-  title_gte: String
-
-  """All values containing the given string."""
-  title_contains: String
-
-  """All values not containing the given string."""
-  title_not_contains: String
-
-  """All values starting with the given string."""
-  title_starts_with: String
-
-  """All values not starting with the given string."""
-  title_not_starts_with: String
-
-  """All values ending with the given string."""
-  title_ends_with: String
-
-  """All values not ending with the given string."""
-  title_not_ends_with: String
   description: String
 
   """All values that are not equal to given value."""
@@ -245,6 +207,46 @@ input EntryWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
 }
 
 input EntryWhereUniqueInput {
@@ -262,10 +264,13 @@ type Mutation {
   createTag(data: TagCreateInput!): Tag!
   createEntry(data: EntryCreateInput!): Entry!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateEntry(data: EntryUpdateInput!, where: EntryWhereUniqueInput!): Entry
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteTag(where: TagWhereUniqueInput!): Tag
   deleteEntry(where: EntryWhereUniqueInput!): Entry
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   upsertEntry(where: EntryWhereUniqueInput!, create: EntryCreateInput!, update: EntryUpdateInput!): Entry!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
@@ -315,6 +320,7 @@ type Query {
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
   entries(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entry]!
   user(where: UserWhereUniqueInput!): User
+  tag(where: TagWhereUniqueInput!): Tag
   entry(where: EntryWhereUniqueInput!): Entry
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
@@ -333,8 +339,13 @@ type Subscription {
   entry(where: EntrySubscriptionWhereInput): EntrySubscriptionPayload
 }
 
-type Tag {
+type Tag implements Node {
+  id: ID!
   name: String!
+  metaTitle: String
+  metaDescription: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -349,6 +360,8 @@ type TagConnection {
 
 input TagCreateInput {
   name: String!
+  metaTitle: String
+  metaDescription: String
 }
 
 """An edge in a connection."""
@@ -361,18 +374,27 @@ type TagEdge {
 }
 
 enum TagOrderByInput {
-  name_ASC
-  name_DESC
   id_ASC
   id_DESC
-  updatedAt_ASC
-  updatedAt_DESC
+  name_ASC
+  name_DESC
+  metaTitle_ASC
+  metaTitle_DESC
+  metaDescription_ASC
+  metaDescription_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type TagPreviousValues {
+  id: ID!
   name: String!
+  metaTitle: String
+  metaDescription: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TagSubscriptionPayload {
@@ -414,8 +436,16 @@ input TagSubscriptionWhereInput {
   node: TagWhereInput
 }
 
+input TagUpdateInput {
+  name: String
+  metaTitle: String
+  metaDescription: String
+}
+
 input TagUpdateManyMutationInput {
   name: String
+  metaTitle: String
+  metaDescription: String
 }
 
 input TagWhereInput {
@@ -427,6 +457,46 @@ input TagWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [TagWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   name: String
 
   """All values that are not equal to given value."""
@@ -467,6 +537,135 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  metaTitle: String
+
+  """All values that are not equal to given value."""
+  metaTitle_not: String
+
+  """All values that are contained in given list."""
+  metaTitle_in: [String!]
+
+  """All values that are not contained in given list."""
+  metaTitle_not_in: [String!]
+
+  """All values less than the given value."""
+  metaTitle_lt: String
+
+  """All values less than or equal the given value."""
+  metaTitle_lte: String
+
+  """All values greater than the given value."""
+  metaTitle_gt: String
+
+  """All values greater than or equal the given value."""
+  metaTitle_gte: String
+
+  """All values containing the given string."""
+  metaTitle_contains: String
+
+  """All values not containing the given string."""
+  metaTitle_not_contains: String
+
+  """All values starting with the given string."""
+  metaTitle_starts_with: String
+
+  """All values not starting with the given string."""
+  metaTitle_not_starts_with: String
+
+  """All values ending with the given string."""
+  metaTitle_ends_with: String
+
+  """All values not ending with the given string."""
+  metaTitle_not_ends_with: String
+  metaDescription: String
+
+  """All values that are not equal to given value."""
+  metaDescription_not: String
+
+  """All values that are contained in given list."""
+  metaDescription_in: [String!]
+
+  """All values that are not contained in given list."""
+  metaDescription_not_in: [String!]
+
+  """All values less than the given value."""
+  metaDescription_lt: String
+
+  """All values less than or equal the given value."""
+  metaDescription_lte: String
+
+  """All values greater than the given value."""
+  metaDescription_gt: String
+
+  """All values greater than or equal the given value."""
+  metaDescription_gte: String
+
+  """All values containing the given string."""
+  metaDescription_contains: String
+
+  """All values not containing the given string."""
+  metaDescription_not_contains: String
+
+  """All values starting with the given string."""
+  metaDescription_starts_with: String
+
+  """All values not starting with the given string."""
+  metaDescription_not_starts_with: String
+
+  """All values ending with the given string."""
+  metaDescription_ends_with: String
+
+  """All values not ending with the given string."""
+  metaDescription_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+}
+
+input TagWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type User implements Node {
@@ -474,9 +673,9 @@ type User implements Node {
   email: String!
   name: String!
   password: String!
+  permissions: [Permission!]!
   resetToken: String
   resetTokenExpiry: Float
-  permissions: [Permission!]!
 }
 
 """A connection to a list of items."""
@@ -535,9 +734,9 @@ type UserPreviousValues {
   email: String!
   name: String!
   password: String!
+  permissions: [Permission!]!
   resetToken: String
   resetTokenExpiry: Float
-  permissions: [Permission!]!
 }
 
 type UserSubscriptionPayload {

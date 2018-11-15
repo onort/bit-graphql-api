@@ -13,6 +13,13 @@ const Mutations = {
     return entry
   },
 
+  async createTag(parent, args, ctx, info) {
+    const { name, metaDescription, metaTitle } = args
+    const tag = { name, metaDescription, metaTitle }
+    const newTag = await ctx.db.mutation.createTag({ data: { ...tag } }, info)
+    return newTag
+  },
+
   async registerUser(parent, args, ctx, info) {
     const email = args.email.toLowerCase()
     // one-way hash

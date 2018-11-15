@@ -3,19 +3,24 @@ type User {
   email: String! @unique
   name: String!
   password: String!
+  permissions: [Permission]
   resetToken: String
   resetTokenExpiry: Float
-  permissions: [Permission]
 }
 
 type Tag {
-  name: String!
+  id: ID! @unique
+  name: String! @unique
+  metaTitle: String
+  metaDescription: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Entry {
   id: ID! @unique
-  title: String!
   description: String!
+  title: String!
 }
 
 enum Permission {
