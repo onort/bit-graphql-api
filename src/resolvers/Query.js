@@ -16,7 +16,8 @@ const Query = {
 
   async tags(parent, args, ctx, info) {
     return await ctx.db.query.tags({}, info)
-  }
+  },
+  tagsConnection: forwardTo("db")
   // async entries(parent, args, ctx, info) {
   //   const entries = await ctx.db.query.entries()
   //   return entries

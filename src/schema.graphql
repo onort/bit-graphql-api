@@ -15,5 +15,11 @@ type Mutation {
 type Query {
   currentUser: User
   entries: [Entry]!
-  tags: [Tag!]
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    first: Int
+  ): [Tag!]
+  tagsConnection(where: TagWhereInput): TagConnection!
 }
