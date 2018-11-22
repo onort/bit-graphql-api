@@ -5,6 +5,16 @@ type SuccessMessage {
 }
 
 type Mutation {
+  createBit(
+    content: String!
+    imageCredit: String
+    imageURL: String
+    metaDescription: String
+    metaTitle: String
+    sourceCredit: String
+    sourceURL: String
+    tags: [String!]!
+  ): SuccessMessage
   createEntry(title: String, description: String): Entry!
   createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
   registerUser(email: String!, password: String!, name: String!): User!
@@ -15,6 +25,7 @@ type Mutation {
 type Query {
   currentUser: User
   entries: [Entry]!
+  bits: [Bit!]
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput

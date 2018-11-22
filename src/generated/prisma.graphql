@@ -1,5 +1,9 @@
 # source: http://localhost:4466
-# timestamp: Thu Nov 15 2018 20:10:23 GMT+0300 (GMT+03:00)
+# timestamp: Tue Nov 20 2018 21:03:43 GMT+0300 (GMT+03:00)
+
+type AggregateBit {
+  count: Int!
+}
 
 type AggregateEntry {
   count: Int!
@@ -16,6 +20,593 @@ type AggregateUser {
 type BatchPayload {
   """The number of nodes that have been affected by the Batch operation."""
   count: Long!
+}
+
+type Bit implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean!
+  metaTitle: String
+  metaDescription: String
+  sourceCredit: String
+  sourceURL: String
+  tags: [String!]!
+}
+
+"""A connection to a list of items."""
+type BitConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BitEdge]!
+  aggregate: AggregateBit!
+}
+
+input BitCreateInput {
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean!
+  metaTitle: String
+  metaDescription: String
+  sourceCredit: String
+  sourceURL: String
+  tags: BitCreatetagsInput
+}
+
+input BitCreatetagsInput {
+  set: [String!]
+}
+
+"""An edge in a connection."""
+type BitEdge {
+  """The item at the end of the edge."""
+  node: Bit!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum BitOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  contentHTML_ASC
+  contentHTML_DESC
+  contentText_ASC
+  contentText_DESC
+  imageCredit_ASC
+  imageCredit_DESC
+  imageURL_ASC
+  imageURL_DESC
+  isPublished_ASC
+  isPublished_DESC
+  metaTitle_ASC
+  metaTitle_DESC
+  metaDescription_ASC
+  metaDescription_DESC
+  sourceCredit_ASC
+  sourceCredit_DESC
+  sourceURL_ASC
+  sourceURL_DESC
+}
+
+type BitPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean!
+  metaTitle: String
+  metaDescription: String
+  sourceCredit: String
+  sourceURL: String
+  tags: [String!]!
+}
+
+type BitSubscriptionPayload {
+  mutation: MutationType!
+  node: Bit
+  updatedFields: [String!]
+  previousValues: BitPreviousValues
+}
+
+input BitSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BitWhereInput
+}
+
+input BitUpdateInput {
+  contentHTML: String
+  contentText: String
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaTitle: String
+  metaDescription: String
+  sourceCredit: String
+  sourceURL: String
+  tags: BitUpdatetagsInput
+}
+
+input BitUpdateManyMutationInput {
+  contentHTML: String
+  contentText: String
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaTitle: String
+  metaDescription: String
+  sourceCredit: String
+  sourceURL: String
+  tags: BitUpdatetagsInput
+}
+
+input BitUpdatetagsInput {
+  set: [String!]
+}
+
+input BitWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  contentHTML: String
+
+  """All values that are not equal to given value."""
+  contentHTML_not: String
+
+  """All values that are contained in given list."""
+  contentHTML_in: [String!]
+
+  """All values that are not contained in given list."""
+  contentHTML_not_in: [String!]
+
+  """All values less than the given value."""
+  contentHTML_lt: String
+
+  """All values less than or equal the given value."""
+  contentHTML_lte: String
+
+  """All values greater than the given value."""
+  contentHTML_gt: String
+
+  """All values greater than or equal the given value."""
+  contentHTML_gte: String
+
+  """All values containing the given string."""
+  contentHTML_contains: String
+
+  """All values not containing the given string."""
+  contentHTML_not_contains: String
+
+  """All values starting with the given string."""
+  contentHTML_starts_with: String
+
+  """All values not starting with the given string."""
+  contentHTML_not_starts_with: String
+
+  """All values ending with the given string."""
+  contentHTML_ends_with: String
+
+  """All values not ending with the given string."""
+  contentHTML_not_ends_with: String
+  contentText: String
+
+  """All values that are not equal to given value."""
+  contentText_not: String
+
+  """All values that are contained in given list."""
+  contentText_in: [String!]
+
+  """All values that are not contained in given list."""
+  contentText_not_in: [String!]
+
+  """All values less than the given value."""
+  contentText_lt: String
+
+  """All values less than or equal the given value."""
+  contentText_lte: String
+
+  """All values greater than the given value."""
+  contentText_gt: String
+
+  """All values greater than or equal the given value."""
+  contentText_gte: String
+
+  """All values containing the given string."""
+  contentText_contains: String
+
+  """All values not containing the given string."""
+  contentText_not_contains: String
+
+  """All values starting with the given string."""
+  contentText_starts_with: String
+
+  """All values not starting with the given string."""
+  contentText_not_starts_with: String
+
+  """All values ending with the given string."""
+  contentText_ends_with: String
+
+  """All values not ending with the given string."""
+  contentText_not_ends_with: String
+  imageCredit: String
+
+  """All values that are not equal to given value."""
+  imageCredit_not: String
+
+  """All values that are contained in given list."""
+  imageCredit_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageCredit_not_in: [String!]
+
+  """All values less than the given value."""
+  imageCredit_lt: String
+
+  """All values less than or equal the given value."""
+  imageCredit_lte: String
+
+  """All values greater than the given value."""
+  imageCredit_gt: String
+
+  """All values greater than or equal the given value."""
+  imageCredit_gte: String
+
+  """All values containing the given string."""
+  imageCredit_contains: String
+
+  """All values not containing the given string."""
+  imageCredit_not_contains: String
+
+  """All values starting with the given string."""
+  imageCredit_starts_with: String
+
+  """All values not starting with the given string."""
+  imageCredit_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageCredit_ends_with: String
+
+  """All values not ending with the given string."""
+  imageCredit_not_ends_with: String
+  imageURL: String
+
+  """All values that are not equal to given value."""
+  imageURL_not: String
+
+  """All values that are contained in given list."""
+  imageURL_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageURL_not_in: [String!]
+
+  """All values less than the given value."""
+  imageURL_lt: String
+
+  """All values less than or equal the given value."""
+  imageURL_lte: String
+
+  """All values greater than the given value."""
+  imageURL_gt: String
+
+  """All values greater than or equal the given value."""
+  imageURL_gte: String
+
+  """All values containing the given string."""
+  imageURL_contains: String
+
+  """All values not containing the given string."""
+  imageURL_not_contains: String
+
+  """All values starting with the given string."""
+  imageURL_starts_with: String
+
+  """All values not starting with the given string."""
+  imageURL_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageURL_ends_with: String
+
+  """All values not ending with the given string."""
+  imageURL_not_ends_with: String
+  isPublished: Boolean
+
+  """All values that are not equal to given value."""
+  isPublished_not: Boolean
+  metaTitle: String
+
+  """All values that are not equal to given value."""
+  metaTitle_not: String
+
+  """All values that are contained in given list."""
+  metaTitle_in: [String!]
+
+  """All values that are not contained in given list."""
+  metaTitle_not_in: [String!]
+
+  """All values less than the given value."""
+  metaTitle_lt: String
+
+  """All values less than or equal the given value."""
+  metaTitle_lte: String
+
+  """All values greater than the given value."""
+  metaTitle_gt: String
+
+  """All values greater than or equal the given value."""
+  metaTitle_gte: String
+
+  """All values containing the given string."""
+  metaTitle_contains: String
+
+  """All values not containing the given string."""
+  metaTitle_not_contains: String
+
+  """All values starting with the given string."""
+  metaTitle_starts_with: String
+
+  """All values not starting with the given string."""
+  metaTitle_not_starts_with: String
+
+  """All values ending with the given string."""
+  metaTitle_ends_with: String
+
+  """All values not ending with the given string."""
+  metaTitle_not_ends_with: String
+  metaDescription: String
+
+  """All values that are not equal to given value."""
+  metaDescription_not: String
+
+  """All values that are contained in given list."""
+  metaDescription_in: [String!]
+
+  """All values that are not contained in given list."""
+  metaDescription_not_in: [String!]
+
+  """All values less than the given value."""
+  metaDescription_lt: String
+
+  """All values less than or equal the given value."""
+  metaDescription_lte: String
+
+  """All values greater than the given value."""
+  metaDescription_gt: String
+
+  """All values greater than or equal the given value."""
+  metaDescription_gte: String
+
+  """All values containing the given string."""
+  metaDescription_contains: String
+
+  """All values not containing the given string."""
+  metaDescription_not_contains: String
+
+  """All values starting with the given string."""
+  metaDescription_starts_with: String
+
+  """All values not starting with the given string."""
+  metaDescription_not_starts_with: String
+
+  """All values ending with the given string."""
+  metaDescription_ends_with: String
+
+  """All values not ending with the given string."""
+  metaDescription_not_ends_with: String
+  sourceCredit: String
+
+  """All values that are not equal to given value."""
+  sourceCredit_not: String
+
+  """All values that are contained in given list."""
+  sourceCredit_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceCredit_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceCredit_lt: String
+
+  """All values less than or equal the given value."""
+  sourceCredit_lte: String
+
+  """All values greater than the given value."""
+  sourceCredit_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceCredit_gte: String
+
+  """All values containing the given string."""
+  sourceCredit_contains: String
+
+  """All values not containing the given string."""
+  sourceCredit_not_contains: String
+
+  """All values starting with the given string."""
+  sourceCredit_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceCredit_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceCredit_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceCredit_not_ends_with: String
+  sourceURL: String
+
+  """All values that are not equal to given value."""
+  sourceURL_not: String
+
+  """All values that are contained in given list."""
+  sourceURL_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceURL_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceURL_lt: String
+
+  """All values less than or equal the given value."""
+  sourceURL_lte: String
+
+  """All values greater than the given value."""
+  sourceURL_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceURL_gte: String
+
+  """All values containing the given string."""
+  sourceURL_contains: String
+
+  """All values not containing the given string."""
+  sourceURL_not_contains: String
+
+  """All values starting with the given string."""
+  sourceURL_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceURL_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceURL_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceURL_not_ends_with: String
+}
+
+input BitWhereUniqueInput {
+  id: ID
 }
 
 scalar DateTime
@@ -260,23 +851,29 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createUser(data: UserCreateInput!): User!
+  createBit(data: BitCreateInput!): Bit!
   createTag(data: TagCreateInput!): Tag!
+  createUser(data: UserCreateInput!): User!
   createEntry(data: EntryCreateInput!): Entry!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateBit(data: BitUpdateInput!, where: BitWhereUniqueInput!): Bit
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateEntry(data: EntryUpdateInput!, where: EntryWhereUniqueInput!): Entry
-  deleteUser(where: UserWhereUniqueInput!): User
+  deleteBit(where: BitWhereUniqueInput!): Bit
   deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteUser(where: UserWhereUniqueInput!): User
   deleteEntry(where: EntryWhereUniqueInput!): Entry
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertBit(where: BitWhereUniqueInput!, create: BitCreateInput!, update: BitUpdateInput!): Bit!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertEntry(where: EntryWhereUniqueInput!, create: EntryCreateInput!, update: EntryUpdateInput!): Entry!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyBits(data: BitUpdateManyMutationInput!, where: BitWhereInput): BatchPayload!
   updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyEntries(data: EntryUpdateManyMutationInput!, where: EntryWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyBits(where: BitWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyEntries(where: EntryWhereInput): BatchPayload!
 }
 
@@ -316,14 +913,17 @@ enum Permission {
 }
 
 type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]!
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   entries(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entry]!
-  user(where: UserWhereUniqueInput!): User
+  bit(where: BitWhereUniqueInput!): Bit
   tag(where: TagWhereUniqueInput!): Tag
+  user(where: UserWhereUniqueInput!): User
   entry(where: EntryWhereUniqueInput!): Entry
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  bitsConnection(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitConnection!
   tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   entriesConnection(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntryConnection!
 
   """Fetches an object given its ID"""
@@ -334,18 +934,19 @@ type Query {
 }
 
 type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  bit(where: BitSubscriptionWhereInput): BitSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   entry(where: EntrySubscriptionWhereInput): EntrySubscriptionPayload
 }
 
 type Tag implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   metaTitle: String
   metaDescription: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -376,25 +977,25 @@ type TagEdge {
 enum TagOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   metaTitle_ASC
   metaTitle_DESC
   metaDescription_ASC
   metaDescription_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type TagPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   metaTitle: String
   metaDescription: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type TagSubscriptionPayload {
@@ -497,6 +1098,50 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -617,50 +1262,6 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   metaDescription_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
 }
 
 input TagWhereUniqueInput {

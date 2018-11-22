@@ -2,6 +2,7 @@ const { forwardTo } = require("prisma-binding")
 
 const Query = {
   // If your query to yoga same as the query to prsima you can forward query w/o writing query for yoga
+  bits: forwardTo("db"),
   entries: forwardTo("db"),
   async currentUser(parent, args, ctx, info) {
     // check if userId on req exists otherwise return null (!No errors otherwise query errors out)

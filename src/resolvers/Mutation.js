@@ -1,9 +1,43 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
+const convertEditorStateString = require("../utils/format")
+  .convertEditorStateString
+
+// TODO: convert mutations to try/catch
 const Mutations = {
+  async createBit(parent, args, ctx, info) {
+    const {
+      content,
+      imageCredit,
+      imageURL,
+      metaDescription,
+      metaTitle,
+      sourceCredit,
+      sourceURL
+    } = args
+    const { contentHTML, contentText } = convertEditorStateString(content)
+    await ctx.db.mutation.createBit(
+      {
+        data: {
+          contentHTML,
+          contentText,
+          imageCredit,
+          imageURL,
+          isPublished: false,
+          metaDescription,
+          metaTitle,
+          sourceCredit,
+          sourceURL,
+          tags: { set: args.tags }
+        }
+      },
+      info
+    )
+    return { message: "Successfuly added bit to database." }
+  },
+
   async createEntry(parent, args, ctx, info) {
-    // entry returns a promise
     const entry = await ctx.db.mutation.createEntry(
       {
         data: { ...args }

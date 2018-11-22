@@ -1,3 +1,28 @@
+type Bit {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean!
+  metaDescription: String
+  metaTitle: String
+  sourceCredit: String
+  sourceURL: String
+  tags: [String!]!
+}
+
+type Tag {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String! @unique
+  metaTitle: String
+  metaDescription: String
+}
+
 type User {
   id: ID! @unique
   email: String! @unique
@@ -6,15 +31,6 @@ type User {
   permissions: [Permission]
   resetToken: String
   resetTokenExpiry: Float
-}
-
-type Tag {
-  id: ID! @unique
-  name: String! @unique
-  metaTitle: String
-  metaDescription: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type Entry {
