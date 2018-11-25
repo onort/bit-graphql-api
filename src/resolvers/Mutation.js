@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 const convertEditorStateString = require("../utils/format")
   .convertEditorStateString
 
-// TODO: convert mutations to try/catch
+// TODO: Error handling for database operations try/catch
 const Mutations = {
   async createBit(parent, args, ctx, info) {
     const {

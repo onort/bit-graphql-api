@@ -23,9 +23,16 @@ type Mutation {
 }
 
 type Query {
+  bits(
+    where: BitWhereInput
+    orderBy: BitOrderByInput
+    skip: Int
+    first: Int
+  ): [Bit!]
+  bitsConnection(where: BitWhereInput): BitConnection!
   currentUser: User
   entries: [Entry]!
-  bits: [Bit!]
+  tag(id: ID!): Tag!
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput
