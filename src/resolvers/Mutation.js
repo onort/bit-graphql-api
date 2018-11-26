@@ -54,6 +54,15 @@ const Mutations = {
     return newTag
   },
 
+  async deleteTag(parent, args, ctx, info) {
+    const where = { id: args.id }
+    // manually passing query
+    const tag = await ctx.db.query.tag({ where }, `{ id, name }`)
+    // TODO: Check for user permissions
+    if (!tag) throw new Error("No tag has been found for the given id.")
+    return ctx.db.mutation.deleteTag({ where }, info)
+  },
+
   async registerUser(parent, args, ctx, info) {
     const email = args.email.toLowerCase()
     // one-way hash
@@ -99,6 +108,19 @@ const Mutations = {
   signOut(parent, args, ctx, info) {
     ctx.response.clearCookie("token")
     return { message: "Signout successful." }
+  },
+
+  async updateTag(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id
+    const updatedTag = await ctx.db.mutation.updateTag(
+      {
+        data: updates,
+        where: { id: args.id }
+      },
+      info
+    )
+    return updatedTag
   }
 }
 

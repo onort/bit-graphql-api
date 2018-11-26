@@ -22,17 +22,19 @@ const Query = {
     )
   },
 
-  async tag(parent, args, ctx, info) {
-    const id = args.id
-    const tag = await ctx.db.query.tag(
-      {
-        where: { id }
-      },
-      info
-    )
-    if (!tag) throw new Error(`No tag found for the given id. Id: ${id}`)
-    return tag
-  },
+  // async tag(parent, args, ctx, info) {
+  //   const id = args.id
+  //   const tag = await ctx.db.query.tag(
+  //     {
+  //       where: { id }
+  //     },
+  //     info
+  //   )
+  //   if (!tag) throw new Error(`No tag found for the given id. Id: ${id}`)
+  //   return tag
+  // },
+
+  tag: forwardTo("db"),
 
   async tags(parent, args, ctx, info) {
     return await ctx.db.query.tags({}, info)

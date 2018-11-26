@@ -17,9 +17,16 @@ type Mutation {
   ): SuccessMessage
   createEntry(title: String, description: String): Entry!
   createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
+  deleteTag(id: ID!): Tag
   registerUser(email: String!, password: String!, name: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
+  updateTag(
+    id: ID!
+    name: String
+    metaDescription: String
+    metaTitle: String
+  ): Tag!
 }
 
 type Query {
@@ -32,7 +39,7 @@ type Query {
   bitsConnection(where: BitWhereInput): BitConnection!
   currentUser: User
   entries: [Entry]!
-  tag(id: ID!): Tag!
+  tag(where: TagWhereUniqueInput!): Tag
   tags(
     where: TagWhereInput
     orderBy: TagOrderByInput
