@@ -17,10 +17,23 @@ type Mutation {
   ): SuccessMessage
   createEntry(title: String, description: String): Entry!
   createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
+  deleteBit(id: ID!): Bit
   deleteTag(id: ID!): Tag
   registerUser(email: String!, password: String!, name: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
+  updateBit(
+    content: String!
+    id: ID!
+    imageCredit: String
+    imageURL: String
+    isPublished: Boolean
+    metaDescription: String
+    metaTitle: String
+    sourceCredit: String
+    sourceURL: String
+    tags: [String!]!
+  ): Bit!
   updateTag(
     id: ID!
     name: String
@@ -30,6 +43,7 @@ type Mutation {
 }
 
 type Query {
+  bit(where: BitWhereUniqueInput!): Bit
   bits(
     where: BitWhereInput
     orderBy: BitOrderByInput

@@ -54,6 +54,15 @@ const Mutations = {
     return newTag
   },
 
+  async deleteBit(parent, args, ctx, info) {
+    const where = { id: args.id }
+    // manually passing query
+    const bit = await ctx.db.query.bit({ where }, `{ id, contentText }`)
+    // TODO: Check for user permissions
+    if (!bit) throw new Error("No bit has been found for the given id.")
+    return ctx.db.mutation.deleteBit({ where }, info)
+  },
+
   async deleteTag(parent, args, ctx, info) {
     const where = { id: args.id }
     // manually passing query
@@ -108,6 +117,24 @@ const Mutations = {
   signOut(parent, args, ctx, info) {
     ctx.response.clearCookie("token")
     return { message: "Signout successful." }
+  },
+
+  async updateBit(parent, args, ctx, info) {
+    const updates = { ...args }
+    delete updates.id
+    delete updates.content
+    delete updates.tags
+    const { contentHTML, contentText } = convertEditorStateString(args.content)
+    updates.contentHTML = contentHTML
+    updates.contentText = contentText
+    const updatedBit = await ctx.db.mutation.updateBit(
+      {
+        data: { ...updates, tags: { set: args.tags } },
+        where: { id: args.id }
+      },
+      info
+    )
+    return updatedBit
   },
 
   async updateTag(parent, args, ctx, info) {
