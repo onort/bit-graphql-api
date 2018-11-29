@@ -60,7 +60,8 @@ const Mutations = {
     const bit = await ctx.db.query.bit({ where }, `{ id, contentText }`)
     // TODO: Check for user permissions
     if (!bit) throw new Error("No bit has been found for the given id.")
-    return ctx.db.mutation.deleteBit({ where }, info)
+    await ctx.db.mutation.deleteBit({ where }, info)
+    return { message: "Successfuly deleted bit from database." }
   },
 
   async deleteTag(parent, args, ctx, info) {
@@ -69,7 +70,8 @@ const Mutations = {
     const tag = await ctx.db.query.tag({ where }, `{ id, name }`)
     // TODO: Check for user permissions
     if (!tag) throw new Error("No tag has been found for the given id.")
-    return ctx.db.mutation.deleteTag({ where }, info)
+    await ctx.db.mutation.deleteTag({ where }, info)
+    return { message: "Successfuly deleted tag from database." }
   },
 
   async registerUser(parent, args, ctx, info) {

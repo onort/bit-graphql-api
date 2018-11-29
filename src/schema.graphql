@@ -17,8 +17,8 @@ type Mutation {
   ): SuccessMessage
   createEntry(title: String, description: String): Entry!
   createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
-  deleteBit(id: ID!): Bit
-  deleteTag(id: ID!): Tag
+  deleteBit(id: ID!): SuccessMessage
+  deleteTag(id: ID!): SuccessMessage
   registerUser(email: String!, password: String!, name: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
