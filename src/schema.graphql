@@ -13,10 +13,13 @@ type Mutation {
     metaTitle: String
     sourceCredit: String
     sourceURL: String
-    tags: [String!]!
+    tagIds: [String!]!
   ): SuccessMessage
-  createEntry(title: String, description: String): Entry!
-  createTag(name: String!, metaDescription: String, metaTitle: String): Tag!
+  createTag(
+    name: String!
+    metaDescription: String
+    metaTitle: String
+  ): SuccessMessage
   deleteBit(id: ID!): SuccessMessage
   deleteTag(id: ID!): SuccessMessage
   registerUser(email: String!, password: String!, name: String!): User!
@@ -32,14 +35,14 @@ type Mutation {
     metaTitle: String
     sourceCredit: String
     sourceURL: String
-    tags: [String!]!
-  ): Bit!
+    tagIds: [String!]!
+  ): SuccessMessage
   updateTag(
     id: ID!
     name: String
     metaDescription: String
     metaTitle: String
-  ): Tag!
+  ): SuccessMessage
 }
 
 type Query {
@@ -52,7 +55,6 @@ type Query {
   ): [Bit!]
   bitsConnection(where: BitWhereInput): BitConnection!
   currentUser: User
-  entries: [Entry]!
   tag(where: TagWhereUniqueInput!): Tag
   tags(
     where: TagWhereInput

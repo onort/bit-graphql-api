@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken")
 
 const convertEditorStateString = require("../utils/format")
   .convertEditorStateString
+const getTagConnections = require("../utils/helpers").getTagConnections
+const userPermissions = require("../constants").userPermissions
 
 // TODO: Error handling for database operations try/catch
 const Mutations = {
@@ -14,12 +16,16 @@ const Mutations = {
       metaDescription,
       metaTitle,
       sourceCredit,
-      sourceURL
+      sourceURL,
+      tagIds
     } = args
     const { contentHTML, contentText } = convertEditorStateString(content)
+    const userId = ctx.request.userId
+    if (!userId) throw new Error("UserId is required for creating a new tag.")
     await ctx.db.mutation.createBit(
       {
         data: {
+          author: { connect: { id: userId } },
           contentHTML,
           contentText,
           imageCredit,
@@ -29,7 +35,7 @@ const Mutations = {
           metaTitle,
           sourceCredit,
           sourceURL,
-          tags: { set: args.tags }
+          tags: { connect: tagIds.map(tagId => ({ id: tagId })) }
         }
       },
       info
@@ -37,21 +43,16 @@ const Mutations = {
     return { message: "Successfuly added bit to database." }
   },
 
-  async createEntry(parent, args, ctx, info) {
-    const entry = await ctx.db.mutation.createEntry(
-      {
-        data: { ...args }
-      },
-      info
-    )
-    return entry
-  },
-
   async createTag(parent, args, ctx, info) {
     const { name, metaDescription, metaTitle } = args
     const tag = { name, metaDescription, metaTitle }
-    const newTag = await ctx.db.mutation.createTag({ data: { ...tag } }, info)
-    return newTag
+    const userId = ctx.request.userId
+    if (!userId) throw new Error("UserId is required for creating a new tag.")
+    await ctx.db.mutation.createTag(
+      { data: { ...tag, createdBy: { connect: { id: userId } } } },
+      info
+    )
+    return { message: "Created tag successfully." }
   },
 
   async deleteBit(parent, args, ctx, info) {
@@ -84,7 +85,7 @@ const Mutations = {
           name: args.name,
           email,
           password,
-          permissions: { set: ["USER"] }
+          permissions: { set: [userPermissions.USER] }
         }
       },
       info
@@ -123,33 +124,41 @@ const Mutations = {
 
   async updateBit(parent, args, ctx, info) {
     const updates = { ...args }
+    // deleting properties to make updates object compatible
+    // with updateBit mutation on prisma
     delete updates.id
     delete updates.content
-    delete updates.tags
+    delete updates.tagIds
     const { contentHTML, contentText } = convertEditorStateString(args.content)
     updates.contentHTML = contentHTML
     updates.contentText = contentText
-    const updatedBit = await ctx.db.mutation.updateBit(
+    const bitBeforeUpdate = await ctx.db.query.bit(
+      { where: { id: args.id } },
+      `{ tags { id }}`
+    )
+    const tagChanges = getTagConnections(bitBeforeUpdate.tags, args.tagIds)
+    if (tagChanges) updates.tags = tagChanges
+    await ctx.db.mutation.updateBit(
       {
-        data: { ...updates, tags: { set: args.tags } },
+        data: { ...updates },
         where: { id: args.id }
       },
       info
     )
-    return updatedBit
+    return { message: "Updated bit successfully." }
   },
 
   async updateTag(parent, args, ctx, info) {
     const updates = { ...args }
     delete updates.id
-    const updatedTag = await ctx.db.mutation.updateTag(
+    await ctx.db.mutation.updateTag(
       {
         data: updates,
         where: { id: args.id }
       },
       info
     )
-    return updatedTag
+    return { message: "Updated tag successfully." }
   }
 }
 

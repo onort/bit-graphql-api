@@ -11,8 +11,6 @@ const Query = {
 
   bitsConnection: forwardTo("db"),
 
-  entries: forwardTo("db"),
-
   async currentUser(parent, args, ctx, info) {
     // check if userId on req exists otherwise return null (!No errors otherwise query errors out)
     if (!ctx.request.userId) return null
@@ -23,18 +21,6 @@ const Query = {
       info
     )
   },
-
-  // async tag(parent, args, ctx, info) {
-  //   const id = args.id
-  //   const tag = await ctx.db.query.tag(
-  //     {
-  //       where: { id }
-  //     },
-  //     info
-  //   )
-  //   if (!tag) throw new Error(`No tag found for the given id. Id: ${id}`)
-  //   return tag
-  // },
 
   tag: forwardTo("db"),
 

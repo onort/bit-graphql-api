@@ -1,11 +1,7 @@
 # source: http://localhost:4466
-# timestamp: Tue Nov 20 2018 21:03:43 GMT+0300 (GMT+03:00)
+# timestamp: Sun Dec 02 2018 17:22:26 GMT+0300 (GMT+03:00)
 
 type AggregateBit {
-  count: Int!
-}
-
-type AggregateEntry {
   count: Int!
 }
 
@@ -26,16 +22,17 @@ type Bit implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  author: User
   contentHTML: String!
   contentText: String!
   imageCredit: String
   imageURL: String
   isPublished: Boolean!
-  metaTitle: String
   metaDescription: String
+  metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: [String!]!
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
 }
 
 """A connection to a list of items."""
@@ -53,16 +50,49 @@ input BitCreateInput {
   contentText: String!
   imageCredit: String
   imageURL: String
-  isPublished: Boolean!
-  metaTitle: String
+  isPublished: Boolean
   metaDescription: String
+  metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: BitCreatetagsInput
+  author: UserCreateOneWithoutBitsInput
+  tags: TagCreateManyWithoutBitsInput
 }
 
-input BitCreatetagsInput {
-  set: [String!]
+input BitCreateManyWithoutAuthorInput {
+  create: [BitCreateWithoutAuthorInput!]
+  connect: [BitWhereUniqueInput!]
+}
+
+input BitCreateManyWithoutTagsInput {
+  create: [BitCreateWithoutTagsInput!]
+  connect: [BitWhereUniqueInput!]
+}
+
+input BitCreateWithoutAuthorInput {
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaDescription: String
+  metaTitle: String
+  sourceCredit: String
+  sourceURL: String
+  tags: TagCreateManyWithoutBitsInput
+}
+
+input BitCreateWithoutTagsInput {
+  contentHTML: String!
+  contentText: String!
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaDescription: String
+  metaTitle: String
+  sourceCredit: String
+  sourceURL: String
+  author: UserCreateOneWithoutBitsInput
 }
 
 """An edge in a connection."""
@@ -91,10 +121,10 @@ enum BitOrderByInput {
   imageURL_DESC
   isPublished_ASC
   isPublished_DESC
-  metaTitle_ASC
-  metaTitle_DESC
   metaDescription_ASC
   metaDescription_DESC
+  metaTitle_ASC
+  metaTitle_DESC
   sourceCredit_ASC
   sourceCredit_DESC
   sourceURL_ASC
@@ -110,11 +140,10 @@ type BitPreviousValues {
   imageCredit: String
   imageURL: String
   isPublished: Boolean!
-  metaTitle: String
   metaDescription: String
+  metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: [String!]!
 }
 
 type BitSubscriptionPayload {
@@ -162,11 +191,12 @@ input BitUpdateInput {
   imageCredit: String
   imageURL: String
   isPublished: Boolean
-  metaTitle: String
   metaDescription: String
+  metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: BitUpdatetagsInput
+  author: UserUpdateOneWithoutBitsInput
+  tags: TagUpdateManyWithoutBitsInput
 }
 
 input BitUpdateManyMutationInput {
@@ -175,15 +205,76 @@ input BitUpdateManyMutationInput {
   imageCredit: String
   imageURL: String
   isPublished: Boolean
-  metaTitle: String
   metaDescription: String
+  metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: BitUpdatetagsInput
 }
 
-input BitUpdatetagsInput {
-  set: [String!]
+input BitUpdateManyWithoutAuthorInput {
+  create: [BitCreateWithoutAuthorInput!]
+  connect: [BitWhereUniqueInput!]
+  disconnect: [BitWhereUniqueInput!]
+  delete: [BitWhereUniqueInput!]
+  update: [BitUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [BitUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input BitUpdateManyWithoutTagsInput {
+  create: [BitCreateWithoutTagsInput!]
+  connect: [BitWhereUniqueInput!]
+  disconnect: [BitWhereUniqueInput!]
+  delete: [BitWhereUniqueInput!]
+  update: [BitUpdateWithWhereUniqueWithoutTagsInput!]
+  upsert: [BitUpsertWithWhereUniqueWithoutTagsInput!]
+}
+
+input BitUpdateWithoutAuthorDataInput {
+  contentHTML: String
+  contentText: String
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaDescription: String
+  metaTitle: String
+  sourceCredit: String
+  sourceURL: String
+  tags: TagUpdateManyWithoutBitsInput
+}
+
+input BitUpdateWithoutTagsDataInput {
+  contentHTML: String
+  contentText: String
+  imageCredit: String
+  imageURL: String
+  isPublished: Boolean
+  metaDescription: String
+  metaTitle: String
+  sourceCredit: String
+  sourceURL: String
+  author: UserUpdateOneWithoutBitsInput
+}
+
+input BitUpdateWithWhereUniqueWithoutAuthorInput {
+  where: BitWhereUniqueInput!
+  data: BitUpdateWithoutAuthorDataInput!
+}
+
+input BitUpdateWithWhereUniqueWithoutTagsInput {
+  where: BitWhereUniqueInput!
+  data: BitUpdateWithoutTagsDataInput!
+}
+
+input BitUpsertWithWhereUniqueWithoutAuthorInput {
+  where: BitWhereUniqueInput!
+  update: BitUpdateWithoutAuthorDataInput!
+  create: BitCreateWithoutAuthorInput!
+}
+
+input BitUpsertWithWhereUniqueWithoutTagsInput {
+  where: BitWhereUniqueInput!
+  update: BitUpdateWithoutTagsDataInput!
+  create: BitCreateWithoutTagsInput!
 }
 
 input BitWhereInput {
@@ -443,46 +534,6 @@ input BitWhereInput {
 
   """All values that are not equal to given value."""
   isPublished_not: Boolean
-  metaTitle: String
-
-  """All values that are not equal to given value."""
-  metaTitle_not: String
-
-  """All values that are contained in given list."""
-  metaTitle_in: [String!]
-
-  """All values that are not contained in given list."""
-  metaTitle_not_in: [String!]
-
-  """All values less than the given value."""
-  metaTitle_lt: String
-
-  """All values less than or equal the given value."""
-  metaTitle_lte: String
-
-  """All values greater than the given value."""
-  metaTitle_gt: String
-
-  """All values greater than or equal the given value."""
-  metaTitle_gte: String
-
-  """All values containing the given string."""
-  metaTitle_contains: String
-
-  """All values not containing the given string."""
-  metaTitle_not_contains: String
-
-  """All values starting with the given string."""
-  metaTitle_starts_with: String
-
-  """All values not starting with the given string."""
-  metaTitle_not_starts_with: String
-
-  """All values ending with the given string."""
-  metaTitle_ends_with: String
-
-  """All values not ending with the given string."""
-  metaTitle_not_ends_with: String
   metaDescription: String
 
   """All values that are not equal to given value."""
@@ -523,6 +574,46 @@ input BitWhereInput {
 
   """All values not ending with the given string."""
   metaDescription_not_ends_with: String
+  metaTitle: String
+
+  """All values that are not equal to given value."""
+  metaTitle_not: String
+
+  """All values that are contained in given list."""
+  metaTitle_in: [String!]
+
+  """All values that are not contained in given list."""
+  metaTitle_not_in: [String!]
+
+  """All values less than the given value."""
+  metaTitle_lt: String
+
+  """All values less than or equal the given value."""
+  metaTitle_lte: String
+
+  """All values greater than the given value."""
+  metaTitle_gt: String
+
+  """All values greater than or equal the given value."""
+  metaTitle_gte: String
+
+  """All values containing the given string."""
+  metaTitle_contains: String
+
+  """All values not containing the given string."""
+  metaTitle_not_contains: String
+
+  """All values starting with the given string."""
+  metaTitle_starts_with: String
+
+  """All values not starting with the given string."""
+  metaTitle_not_starts_with: String
+
+  """All values ending with the given string."""
+  metaTitle_ends_with: String
+
+  """All values not ending with the given string."""
+  metaTitle_not_ends_with: String
   sourceCredit: String
 
   """All values that are not equal to given value."""
@@ -603,6 +694,10 @@ input BitWhereInput {
 
   """All values not ending with the given string."""
   sourceURL_not_ends_with: String
+  author: UserWhereInput
+  tags_every: TagWhereInput
+  tags_some: TagWhereInput
+  tags_none: TagWhereInput
 }
 
 input BitWhereUniqueInput {
@@ -610,239 +705,6 @@ input BitWhereUniqueInput {
 }
 
 scalar DateTime
-
-type Entry implements Node {
-  id: ID!
-  description: String!
-  title: String!
-}
-
-"""A connection to a list of items."""
-type EntryConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [EntryEdge]!
-  aggregate: AggregateEntry!
-}
-
-input EntryCreateInput {
-  description: String!
-  title: String!
-}
-
-"""An edge in a connection."""
-type EntryEdge {
-  """The item at the end of the edge."""
-  node: Entry!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum EntryOrderByInput {
-  id_ASC
-  id_DESC
-  description_ASC
-  description_DESC
-  title_ASC
-  title_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type EntryPreviousValues {
-  id: ID!
-  description: String!
-  title: String!
-}
-
-type EntrySubscriptionPayload {
-  mutation: MutationType!
-  node: Entry
-  updatedFields: [String!]
-  previousValues: EntryPreviousValues
-}
-
-input EntrySubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [EntrySubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [EntrySubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [EntrySubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: EntryWhereInput
-}
-
-input EntryUpdateInput {
-  description: String
-  title: String
-}
-
-input EntryUpdateManyMutationInput {
-  description: String
-  title: String
-}
-
-input EntryWhereInput {
-  """Logical AND on all given filters."""
-  AND: [EntryWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [EntryWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [EntryWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  title: String
-
-  """All values that are not equal to given value."""
-  title_not: String
-
-  """All values that are contained in given list."""
-  title_in: [String!]
-
-  """All values that are not contained in given list."""
-  title_not_in: [String!]
-
-  """All values less than the given value."""
-  title_lt: String
-
-  """All values less than or equal the given value."""
-  title_lte: String
-
-  """All values greater than the given value."""
-  title_gt: String
-
-  """All values greater than or equal the given value."""
-  title_gte: String
-
-  """All values containing the given string."""
-  title_contains: String
-
-  """All values not containing the given string."""
-  title_not_contains: String
-
-  """All values starting with the given string."""
-  title_starts_with: String
-
-  """All values not starting with the given string."""
-  title_not_starts_with: String
-
-  """All values ending with the given string."""
-  title_ends_with: String
-
-  """All values not ending with the given string."""
-  title_not_ends_with: String
-}
-
-input EntryWhereUniqueInput {
-  id: ID
-}
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -854,27 +716,21 @@ type Mutation {
   createBit(data: BitCreateInput!): Bit!
   createTag(data: TagCreateInput!): Tag!
   createUser(data: UserCreateInput!): User!
-  createEntry(data: EntryCreateInput!): Entry!
   updateBit(data: BitUpdateInput!, where: BitWhereUniqueInput!): Bit
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateEntry(data: EntryUpdateInput!, where: EntryWhereUniqueInput!): Entry
   deleteBit(where: BitWhereUniqueInput!): Bit
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteEntry(where: EntryWhereUniqueInput!): Entry
   upsertBit(where: BitWhereUniqueInput!, create: BitCreateInput!, update: BitUpdateInput!): Bit!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertEntry(where: EntryWhereUniqueInput!, create: EntryCreateInput!, update: EntryUpdateInput!): Entry!
   updateManyBits(data: BitUpdateManyMutationInput!, where: BitWhereInput): BatchPayload!
   updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyEntries(data: EntryUpdateManyMutationInput!, where: EntryWhereInput): BatchPayload!
   deleteManyBits(where: BitWhereInput): BatchPayload!
   deleteManyTags(where: TagWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyEntries(where: EntryWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -907,24 +763,20 @@ type PageInfo {
 enum Permission {
   DEVELOPER
   ADMIN
-  CREATOR
+  AUTHOR
   USER
-  PERMISSIONUPDATE
 }
 
 type Query {
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]!
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  entries(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entry]!
   bit(where: BitWhereUniqueInput!): Bit
   tag(where: TagWhereUniqueInput!): Tag
   user(where: UserWhereUniqueInput!): User
-  entry(where: EntryWhereUniqueInput!): Entry
   bitsConnection(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitConnection!
   tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  entriesConnection(where: EntryWhereInput, orderBy: EntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntryConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -937,13 +789,14 @@ type Subscription {
   bit(where: BitSubscriptionWhereInput): BitSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  entry(where: EntrySubscriptionWhereInput): EntrySubscriptionPayload
 }
 
 type Tag implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  createdBy: User
+  bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
   name: String!
   metaTitle: String
   metaDescription: String
@@ -963,6 +816,20 @@ input TagCreateInput {
   name: String!
   metaTitle: String
   metaDescription: String
+  createdBy: UserCreateOneInput
+  bits: BitCreateManyWithoutTagsInput
+}
+
+input TagCreateManyWithoutBitsInput {
+  create: [TagCreateWithoutBitsInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+input TagCreateWithoutBitsInput {
+  name: String!
+  metaTitle: String
+  metaDescription: String
+  createdBy: UserCreateOneInput
 }
 
 """An edge in a connection."""
@@ -1041,12 +908,41 @@ input TagUpdateInput {
   name: String
   metaTitle: String
   metaDescription: String
+  createdBy: UserUpdateOneInput
+  bits: BitUpdateManyWithoutTagsInput
 }
 
 input TagUpdateManyMutationInput {
   name: String
   metaTitle: String
   metaDescription: String
+}
+
+input TagUpdateManyWithoutBitsInput {
+  create: [TagCreateWithoutBitsInput!]
+  connect: [TagWhereUniqueInput!]
+  disconnect: [TagWhereUniqueInput!]
+  delete: [TagWhereUniqueInput!]
+  update: [TagUpdateWithWhereUniqueWithoutBitsInput!]
+  upsert: [TagUpsertWithWhereUniqueWithoutBitsInput!]
+}
+
+input TagUpdateWithoutBitsDataInput {
+  name: String
+  metaTitle: String
+  metaDescription: String
+  createdBy: UserUpdateOneInput
+}
+
+input TagUpdateWithWhereUniqueWithoutBitsInput {
+  where: TagWhereUniqueInput!
+  data: TagUpdateWithoutBitsDataInput!
+}
+
+input TagUpsertWithWhereUniqueWithoutBitsInput {
+  where: TagWhereUniqueInput!
+  update: TagUpdateWithoutBitsDataInput!
+  create: TagCreateWithoutBitsInput!
 }
 
 input TagWhereInput {
@@ -1262,6 +1158,10 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   metaDescription_not_ends_with: String
+  createdBy: UserWhereInput
+  bits_every: BitWhereInput
+  bits_some: BitWhereInput
+  bits_none: BitWhereInput
 }
 
 input TagWhereUniqueInput {
@@ -1271,6 +1171,7 @@ input TagWhereUniqueInput {
 
 type User implements Node {
   id: ID!
+  bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
   email: String!
   name: String!
   password: String!
@@ -1296,10 +1197,30 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
+  bits: BitCreateManyWithoutAuthorInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutBitsInput {
+  create: UserCreateWithoutBitsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreatepermissionsInput {
   set: [Permission!]
+}
+
+input UserCreateWithoutBitsInput {
+  email: String!
+  name: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
 }
 
 """An edge in a connection."""
@@ -1379,6 +1300,16 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  email: String
+  name: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  bits: BitUpdateManyWithoutAuthorInput
+}
+
 input UserUpdateInput {
   email: String
   name: String
@@ -1386,6 +1317,7 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  bits: BitUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1397,8 +1329,45 @@ input UserUpdateManyMutationInput {
   permissions: UserUpdatepermissionsInput
 }
 
+input UserUpdateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+}
+
+input UserUpdateOneWithoutBitsInput {
+  create: UserCreateWithoutBitsInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutBitsDataInput
+  upsert: UserUpsertWithoutBitsInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpdateWithoutBitsDataInput {
+  email: String
+  name: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithoutBitsInput {
+  update: UserUpdateWithoutBitsDataInput!
+  create: UserCreateWithoutBitsInput!
 }
 
 input UserWhereInput {
@@ -1632,6 +1601,9 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   resetTokenExpiry_gte: Float
+  bits_every: BitWhereInput
+  bits_some: BitWhereInput
+  bits_none: BitWhereInput
 }
 
 input UserWhereUniqueInput {

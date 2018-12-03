@@ -2,22 +2,25 @@ type Bit {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
+  author: User @relation(name: "BitAuthor", onDelete: SET_NULL)
   contentHTML: String!
   contentText: String!
   imageCredit: String
   imageURL: String
-  isPublished: Boolean!
+  isPublished: Boolean! @default(value: "false")
   metaDescription: String
   metaTitle: String
   sourceCredit: String
   sourceURL: String
-  tags: [String!]!
+  tags: [Tag!]! @relation(name: "BitTag", onDelete: SET_NULL)
 }
 
 type Tag {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
+  createdBy: User
+  bits: [Bit!]! @relation(name: "BitTag", onDelete: SET_NULL)
   name: String! @unique
   metaTitle: String
   metaDescription: String
@@ -25,6 +28,7 @@ type Tag {
 
 type User {
   id: ID! @unique
+  bits: [Bit!]! @relation(name: "BitAuthor", onDelete: SET_NULL)
   email: String! @unique
   name: String!
   password: String!
@@ -33,16 +37,9 @@ type User {
   resetTokenExpiry: Float
 }
 
-type Entry {
-  id: ID! @unique
-  description: String!
-  title: String!
-}
-
 enum Permission {
   DEVELOPER
   ADMIN
-  CREATOR
+  AUTHOR
   USER
-  PERMISSIONUPDATE
 }
