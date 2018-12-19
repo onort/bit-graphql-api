@@ -22,6 +22,19 @@ const Query = {
     )
   },
 
+  async getTags(parent, args, ctx, info) {
+    // TODO: Order tags
+    const tags = await ctx.db.query.tags(
+      {
+        where: { name_contains: args.query },
+        first: 5
+      },
+      info
+    )
+    if (!tags.length) return []
+    return tags
+  },
+
   tag: forwardTo("db"),
 
   async tags(parent, args, ctx, info) {

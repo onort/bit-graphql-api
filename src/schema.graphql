@@ -55,6 +55,7 @@ type Query {
   ): [Bit!]
   bitsConnection(where: BitWhereInput): BitConnection!
   currentUser: User
+  getTags(query: String!): [Tag]!
   tag(where: TagWhereUniqueInput!): Tag
   tags(
     where: TagWhereInput
