@@ -9,6 +9,7 @@ type Mutation {
     content: String!
     imageCredit: String
     imageURL: String
+    isPublished: Boolean
     metaDescription: String
     metaTitle: String
     sourceCredit: String
