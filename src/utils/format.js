@@ -9,4 +9,12 @@ const convertEditorStateString = editorStateString => {
   return { contentHTML, contentText }
 }
 
-module.exports = { convertEditorStateString }
+const stringToSlug = text => {
+  return text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/-+/g, "-") // collapse dashes
+    .replace(/[^\w-]+/g, "") // remove non-alphanumeric
+}
+
+module.exports = { convertEditorStateString, stringToSlug }

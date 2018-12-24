@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Dec 02 2018 17:22:26 GMT+0300 (GMT+03:00)
+# timestamp: Mon Dec 24 2018 22:06:24 GMT+0300 (GMT+03:00)
 
 type AggregateBit {
   count: Int!
@@ -800,6 +800,7 @@ type Tag implements Node {
   name: String!
   metaTitle: String
   metaDescription: String
+  slug: String!
 }
 
 """A connection to a list of items."""
@@ -816,6 +817,7 @@ input TagCreateInput {
   name: String!
   metaTitle: String
   metaDescription: String
+  slug: String!
   createdBy: UserCreateOneInput
   bits: BitCreateManyWithoutTagsInput
 }
@@ -829,6 +831,7 @@ input TagCreateWithoutBitsInput {
   name: String!
   metaTitle: String
   metaDescription: String
+  slug: String!
   createdBy: UserCreateOneInput
 }
 
@@ -854,6 +857,8 @@ enum TagOrderByInput {
   metaTitle_DESC
   metaDescription_ASC
   metaDescription_DESC
+  slug_ASC
+  slug_DESC
 }
 
 type TagPreviousValues {
@@ -863,6 +868,7 @@ type TagPreviousValues {
   name: String!
   metaTitle: String
   metaDescription: String
+  slug: String!
 }
 
 type TagSubscriptionPayload {
@@ -908,6 +914,7 @@ input TagUpdateInput {
   name: String
   metaTitle: String
   metaDescription: String
+  slug: String
   createdBy: UserUpdateOneInput
   bits: BitUpdateManyWithoutTagsInput
 }
@@ -916,6 +923,7 @@ input TagUpdateManyMutationInput {
   name: String
   metaTitle: String
   metaDescription: String
+  slug: String
 }
 
 input TagUpdateManyWithoutBitsInput {
@@ -931,6 +939,7 @@ input TagUpdateWithoutBitsDataInput {
   name: String
   metaTitle: String
   metaDescription: String
+  slug: String
   createdBy: UserUpdateOneInput
 }
 
@@ -1158,6 +1167,46 @@ input TagWhereInput {
 
   """All values not ending with the given string."""
   metaDescription_not_ends_with: String
+  slug: String
+
+  """All values that are not equal to given value."""
+  slug_not: String
+
+  """All values that are contained in given list."""
+  slug_in: [String!]
+
+  """All values that are not contained in given list."""
+  slug_not_in: [String!]
+
+  """All values less than the given value."""
+  slug_lt: String
+
+  """All values less than or equal the given value."""
+  slug_lte: String
+
+  """All values greater than the given value."""
+  slug_gt: String
+
+  """All values greater than or equal the given value."""
+  slug_gte: String
+
+  """All values containing the given string."""
+  slug_contains: String
+
+  """All values not containing the given string."""
+  slug_not_contains: String
+
+  """All values starting with the given string."""
+  slug_starts_with: String
+
+  """All values not starting with the given string."""
+  slug_not_starts_with: String
+
+  """All values ending with the given string."""
+  slug_ends_with: String
+
+  """All values not ending with the given string."""
+  slug_not_ends_with: String
   createdBy: UserWhereInput
   bits_every: BitWhereInput
   bits_some: BitWhereInput
@@ -1167,6 +1216,7 @@ input TagWhereInput {
 input TagWhereUniqueInput {
   id: ID
   name: String
+  slug: String
 }
 
 type User implements Node {

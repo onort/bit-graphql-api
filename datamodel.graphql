@@ -24,6 +24,7 @@ type Tag {
   name: String! @unique
   metaTitle: String
   metaDescription: String
+  slug: String! @unique
 }
 
 type User {

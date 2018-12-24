@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 
 const convertEditorStateString = require("../utils/format")
   .convertEditorStateString
+const stringToSlug = require("../utils/format").stringToSlug
 const getTagConnections = require("../utils/helpers").getTagConnections
 const userPermissions = require("../constants").userPermissions
 
@@ -45,8 +46,9 @@ const Mutations = {
   },
 
   async createTag(parent, args, ctx, info) {
-    const { name, metaDescription, metaTitle } = args
+    const { name, metaDescription, metaTitle, slug } = args
     const tag = { name, metaDescription, metaTitle }
+    tag.slug = stringToSlug(slug)
     const userId = ctx.request.userId
     if (!userId) throw new Error("UserId is required for creating a new tag.")
     await ctx.db.mutation.createTag(
@@ -151,6 +153,9 @@ const Mutations = {
 
   async updateTag(parent, args, ctx, info) {
     const updates = { ...args }
+    if (args.slug.length > 0) {
+      updates.slug = stringToSlug(args.slug)
+    }
     delete updates.id
     await ctx.db.mutation.updateTag(
       {

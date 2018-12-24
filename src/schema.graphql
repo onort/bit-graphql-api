@@ -20,6 +20,7 @@ type Mutation {
     name: String!
     metaDescription: String
     metaTitle: String
+    slug: String!
   ): SuccessMessage
   deleteBit(id: ID!): SuccessMessage
   deleteTag(id: ID!): SuccessMessage
@@ -43,6 +44,7 @@ type Mutation {
     name: String
     metaDescription: String
     metaTitle: String
+    slug: String
   ): SuccessMessage
 }
 
